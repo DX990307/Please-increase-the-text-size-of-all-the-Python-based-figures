@@ -22,6 +22,7 @@ This minimal paper demonstrates a tight loop for tuning Python-generated figures
 
 The figure below is intentionally included at column width. The default style file uses a larger font so the plot stays readable after typesetting.
 
+% fontbigger: demo
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{figures/output.pdf}
@@ -30,5 +31,19 @@ The figure below is intentionally included at column width. The default style fi
 \end{figure}
 
 Small parameter tweaks are usually obvious only after the figure is embedded in the paper. This prototype shortens that feedback loop.
+
+\section{Multiple Figures}
+
+The sample paper also includes a second figure generated from a converted existing script. This demonstrates the multi-figure workflow: each figure can have its own script, style file, output path, and registry entry.
+
+% fontbigger: prefetcher
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/prefetcher/learner_sensitivity_bar_chart.pdf}
+  \caption{A converted prefetcher sensitivity chart managed through the figure registry.}
+  \label{fig:prefetcher}
+\end{figure}
+
+With the cursor inside either figure environment, the command `Font Bigger: Open Config For Figure Under Cursor` opens the matching style file and switches the active script.
 
 \end{document}

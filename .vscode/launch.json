@@ -8,6 +8,8 @@
       "runtimeExecutable": "${execPath}",
       "args": [
         "--extensionDevelopmentPath=${workspaceFolder}",
+        "--disable-extension=teamsmelly.smellgptextension",
+        "--disable-extension=figma.figma-vscode-extension",
         "${workspaceFolder}/examples/minimal-paper"
       ]
     }

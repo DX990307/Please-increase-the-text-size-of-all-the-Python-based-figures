@@ -7,6 +7,7 @@ examples/minimal-paper/.fontbigger/.cache/
 examples/minimal-paper/.fontbigger/.config/
 examples/minimal-paper/figures/output.pdf
 examples/minimal-paper/figures/output.png
+examples/minimal-paper/figures/prefetcher/
 examples/minimal-paper/*.aux
 examples/minimal-paper/*.fdb_latexmk
 examples/minimal-paper/*.fls

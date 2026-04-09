@@ -21,8 +21,11 @@
   "activationEvents": [
     "onStartupFinished",
     "onCommand:fontBigger.openStyleFile",
+    "onCommand:fontBigger.openFigureRegistry",
+    "onCommand:fontBigger.openConfigForFigureUnderCursor",
     "onCommand:fontBigger.runPipeline",
-    "onCommand:fontBigger.createStyleFile"
+    "onCommand:fontBigger.createStyleFile",
+    "onCommand:fontBigger.createCompatibleCopy"
   ],
   "main": "./src/extension.js",
   "contributes": {
@@ -32,12 +35,24 @@
         "title": "Font Bigger: Open Style File"
       },
       {
+        "command": "fontBigger.openFigureRegistry",
+        "title": "Font Bigger: Open Figure Registry"
+      },
+      {
+        "command": "fontBigger.openConfigForFigureUnderCursor",
+        "title": "Font Bigger: Open Config For Figure Under Cursor"
+      },
+      {
         "command": "fontBigger.runPipeline",
         "title": "Font Bigger: Run Figure + LaTeX Pipeline"
       },
       {
         "command": "fontBigger.createStyleFile",
         "title": "Font Bigger: Create Default Style File"
+      },
+      {
+        "command": "fontBigger.createCompatibleCopy",
+        "title": "Font Bigger: Create Compatible Copy From Existing Script"
       }
     ],
     "configuration": {
@@ -46,31 +61,43 @@
         "fontBigger.styleFile": {
           "type": "string",
           "default": ".fontbigger/figure_style.json",
+          "scope": "resource",
           "description": "Relative path to the figure style JSON file."
+        },
+        "fontBigger.registryFile": {
+          "type": "string",
+          "default": ".fontbigger/figures.json",
+          "scope": "resource",
+          "description": "Relative path to the figure registry JSON file."
         },
         "fontBigger.plotScript": {
           "type": "string",
           "default": "scripts/plot_demo.py",
+          "scope": "resource",
           "description": "Relative path to the Python plotting script."
         },
         "fontBigger.mainTexFile": {
           "type": "string",
           "default": "main.tex",
+          "scope": "resource",
           "description": "Relative path to the main TeX file."
         },
         "fontBigger.pythonCommand": {
           "type": "string",
           "default": "python3",
+          "scope": "resource",
           "description": "Command used to run the Python plotting script."
         },
         "fontBigger.latexCommand": {
           "type": "string",
           "default": "",
+          "scope": "resource",
           "description": "Optional LaTeX build command. When empty, latexmk is used automatically."
         },
         "fontBigger.runOnSave": {
           "type": "boolean",
           "default": true,
+          "scope": "resource",
           "description": "Run the figure + LaTeX pipeline automatically when the style file is saved."
         }
       }

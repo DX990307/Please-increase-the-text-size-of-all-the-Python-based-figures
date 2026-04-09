@@ -1,0 +1,24 @@
+{
+  "figures": {
+    "demo": {
+      "script": "scripts/plot_demo.py",
+      "style": ".fontbigger/figure_style.json",
+      "outputs": [
+        "figures/output.pdf"
+      ],
+      "labels": [
+        "fig:demo"
+      ]
+    },
+    "prefetcher": {
+      "script": "scripts/plot_prefetcher_sensitivity_bar_chart_fontbigger.py",
+      "style": ".fontbigger/prefetcher_style.json",
+      "outputs": [
+        "figures/prefetcher/learner_sensitivity_bar_chart.pdf"
+      ],
+      "labels": [
+        "fig:prefetcher"
+      ]
+    }
+  }
+}

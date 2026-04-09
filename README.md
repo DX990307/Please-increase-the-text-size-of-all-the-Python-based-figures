@@ -1,33 +1,34 @@
-# 你把字体调大一点
+# Please Increase the Text Size of All the Python-Based Figures
 
-一个面向论文写作的 VS Code 插件原型。
+A VS Code extension prototype for paper writing.
 
-它解决的是一个很具体的问题：当论文里的 matplotlib 图片放进 LaTeX 排版后显得太小、太挤、太难看时，你可以一边看 PDF，一边改图表样式参数，保存后自动重绘图片并重新编译论文。
+The goal is simple: when a figure looks too small after it is embedded into a LaTeX paper, you should be able to tweak figure styling, regenerate the figure, rebuild the PDF, and inspect the final typeset result without bouncing across tools.
 
-当前仓库已经包含一个可运行的 `V0.1` 原型：
+This repository currently contains a working prototype with:
 
-- VS Code 扩展骨架
-- 样式文件保存监听
-- 自动执行 Python 绘图脚本
-- 自动执行 `latexmk` 重新编译
-- 最小论文示例工程
-- 默认更大的 matplotlib 字体参数
+- a VS Code extension skeleton
+- style-file-driven figure regeneration
+- automatic `latexmk` rebuilds
+- a minimal LaTeX paper sample
+- multi-figure registry support
+- a first-pass compatibility workflow for existing matplotlib scripts
 
-## 当前效果
+## What It Does
 
-推荐工作流：
+Recommended layout in VS Code:
 
-- 左侧打开 `main.tex`
-- 右上用 LaTeX Workshop 预览 PDF
-- 右下打开 `.fontbigger/figure_style.json`
+- left: `main.tex`
+- top-right: PDF preview via `LaTeX Workshop`
+- bottom-right: a `.fontbigger/*.json` style file
 
-保存样式文件后，扩展会自动：
+After you save the style file, the extension automatically:
 
-1. 运行 Python 脚本重绘图片
-2. 运行 `latexmk` 重新编译论文
-3. 在 VS Code 里看到更新后的 PDF
+1. runs the selected Python plotting script
+2. regenerates the figure output
+3. rebuilds the LaTeX PDF
+4. lets you inspect the final paper layout immediately
 
-## 仓库结构
+## Current Repository Layout
 
 ```text
 .
@@ -36,10 +37,16 @@
 ├── examples/
 │   └── minimal-paper/
 │       ├── .fontbigger/
-│       │   └── figure_style.json
+│       │   ├── figure_style.json
+│       │   ├── figures.json
+│       │   └── prefetcher_style.json
+│       ├── .vscode/
+│       │   └── settings.json
 │       ├── figures/
 │       ├── scripts/
-│       │   └── plot_demo.py
+│       │   ├── plot_demo.py
+│       │   ├── plot_prefetcher_sensitivity_bar_chart.py
+│       │   └── plot_prefetcher_sensitivity_bar_chart_fontbigger.py
 │       └── main.tex
 ├── resources/
 │   └── default-figure-style.json
@@ -48,104 +55,243 @@
 └── package.json
 ```
 
-## 已实现功能
+## Quick Start
 
-- `Font Bigger: Open Style File`
-  自动打开样式文件；如果不存在，会自动创建默认模板。
-- `Font Bigger: Run Figure + LaTeX Pipeline`
-  手动执行一次重绘和编译。
-- 保存样式文件时自动触发流水线
-- 输出日志到 `Font Bigger` output channel
-- 支持通过 VS Code 设置修改：
-  - 样式文件路径
-  - Python 绘图脚本路径
-  - 主 TeX 文件路径
-  - Python 命令
-  - LaTeX 编译命令
+### 1. Prerequisites
 
-## 默认字体已经调大
-
-示例样式文件位于：
-
-[`examples/minimal-paper/.fontbigger/figure_style.json`](examples/minimal-paper/.fontbigger/figure_style.json)
-
-默认值刻意偏大，目的是让双栏论文里的图先“看得清”：
-
-- `font_size`: `16`
-- `axis_label_size`: `18`
-- `title_size`: `20`
-- `tick_label_size`: `14`
-- `legend_font_size`: `14`
-- `line_width`: `2.6`
-
-## 快速开始
-
-### 1. 准备环境
-
-建议本机具备：
+You should have:
 
 - VS Code
 - Python 3
 - `matplotlib`
 - `latexmk`
-- VS Code 插件 `LaTeX Workshop`
+- the VS Code extension `LaTeX Workshop`
 
-### 2. 启动扩展开发宿主
+On macOS, the sample workspace already includes [settings.json](examples/minimal-paper/.vscode/settings.json) that points `LaTeX Workshop` to `/Library/TeX/texbin`.
 
-在本仓库中按 `F5`，会启动一个 Extension Development Host，并自动打开：
+### 2. Launch the Extension Development Host
 
-[`examples/minimal-paper`](examples/minimal-paper)
+Open this repository in VS Code and press `F5`.
 
-### 3. 打开示例论文
+This starts an Extension Development Host and opens the sample workspace:
 
-在开发宿主里：
+- [examples/minimal-paper](examples/minimal-paper)
 
-1. 打开 [`examples/minimal-paper/main.tex`](examples/minimal-paper/main.tex)
-2. 用 LaTeX Workshop 打开 PDF 预览
-3. 运行命令 `Font Bigger: Open Style File`
-4. 修改样式参数并保存
+### 3. Open the Sample Paper
 
-### 4. 观察自动刷新
+In the development host:
 
-保存 [`examples/minimal-paper/.fontbigger/figure_style.json`](examples/minimal-paper/.fontbigger/figure_style.json) 后，扩展会：
+1. open [examples/minimal-paper/main.tex](examples/minimal-paper/main.tex)
+2. open the PDF preview with `LaTeX Workshop`
+3. run `Font Bigger: Open Config For Figure Under Cursor` or `Font Bigger: Open Style File`
+4. edit the style JSON and save
 
-- 运行 [`examples/minimal-paper/scripts/plot_demo.py`](examples/minimal-paper/scripts/plot_demo.py)
-- 重写 `figures/output.pdf` 与 `figures/output.png`
-- 重新编译 [`examples/minimal-paper/main.tex`](examples/minimal-paper/main.tex)
+### 4. Observe the Update Loop
 
-## 配置项
+After saving a style file, the extension will:
 
-扩展配置命名空间是 `fontBigger`。
+- run the active Python script
+- rewrite the figure outputs
+- rebuild [examples/minimal-paper/main.tex](examples/minimal-paper/main.tex)
+
+## Main Commands
+
+- `Font Bigger: Open Style File`
+  Opens the currently active style file. Creates it from a template if it does not exist.
+
+- `Font Bigger: Run Figure + LaTeX Pipeline`
+  Runs one manual regenerate-and-rebuild cycle.
+
+- `Font Bigger: Create Default Style File`
+  Creates the current style file from the default template.
+
+- `Font Bigger: Create Compatible Copy From Existing Script`
+  Generates a `*_fontbigger.py` compatible copy plus a matching style file from an existing Python plotting script.
+
+- `Font Bigger: Open Figure Registry`
+  Opens the multi-figure registry file.
+
+- `Font Bigger: Open Config For Figure Under Cursor`
+  Looks at the current LaTeX figure block, resolves the matching figure entry from the registry, switches the active script/style pair, and opens the matching config.
+
+## Style File Format
+
+Style files are grouped by category instead of being a flat list of keys.
+
+- `canvas`
+  Figure size, DPI, background, output directory
+- `text`
+  Fonts, labels, title text, text colors
+- `axes`
+  Grid, spines, ranges
+- `lines`
+  Line width, marker size, alpha
+- `legend`
+  Legend placement
+- `series`
+  Per-series labels, colors, markers
+- `palette`
+  Default color cycle for broader matplotlib compatibility
+
+Example:
+
+```json
+{
+  "canvas": {
+    "figure_width": 7.2,
+    "figure_height": 3.6,
+    "output_dir": "figures/my-figure"
+  },
+  "text": {
+    "title_text": "A Wider Figure With Softer Colors",
+    "title_size": 24
+  },
+  "series": {
+    "primary": {
+      "color": "#005F73"
+    },
+    "secondary": {
+      "color": "#BB3E03"
+    }
+  }
+}
+```
+
+The default sample style lives at:
+
+- [examples/minimal-paper/.fontbigger/figure_style.json](examples/minimal-paper/.fontbigger/figure_style.json)
+
+## Multi-Figure Workflow
+
+This prototype now includes a simple figure registry:
+
+- [examples/minimal-paper/.fontbigger/figures.json](examples/minimal-paper/.fontbigger/figures.json)
+
+Each figure entry can define:
+
+- `script`
+- `style`
+- `outputs`
+- `labels`
+
+Example:
+
+```json
+{
+  "figures": {
+    "demo": {
+      "script": "scripts/plot_demo.py",
+      "style": ".fontbigger/figure_style.json",
+      "outputs": ["figures/output.pdf"],
+      "labels": ["fig:demo"]
+    }
+  }
+}
+```
+
+To make figure resolution more reliable, add a lightweight marker above the LaTeX figure:
+
+```tex
+% fontbigger: demo
+\begin{figure}
+  \centering
+  \includegraphics{figures/output.pdf}
+  \caption{...}
+  \label{fig:demo}
+\end{figure}
+```
+
+Then place the cursor inside that figure and run:
+
+- `Font Bigger: Open Config For Figure Under Cursor`
+
+The extension will:
+
+1. inspect the current `figure` environment
+2. try `% fontbigger: <id>` first
+3. fall back to `\includegraphics{...}` and `\label{...}` matching
+4. switch the active `plotScript` and `styleFile`
+5. open the matched config
+
+## Adapting Existing Scripts
+
+The extension does not try to rewrite arbitrary user scripts in place.
+
+Instead, it generates a compatible copy:
+
+- keeps the original script unchanged
+- creates a `*_fontbigger.py` editable copy
+- creates a matching `.fontbigger/*_style.json`
+- switches the workspace to use the new script/style pair
+- registers the new figure in the figure registry
+
+This workflow is exposed through:
+
+- `Font Bigger: Create Compatible Copy From Existing Script`
+
+The generated compatible copy currently does a broad first-pass adaptation:
+
+- adds `--style`
+- redirects output into a configurable directory
+- injects matplotlib runtime defaults for fonts, canvas size, grids, and color cycle
+- rewrites common hardcoded output-path variables
+- keeps `FONTBIGGER_TODO` comments for remaining manual cleanup
+
+It is intentionally not marketed as a perfect converter for arbitrary matplotlib code.
+
+### Included Example
+
+This repository already contains a real converted example:
+
+- original script:
+  [examples/minimal-paper/scripts/plot_prefetcher_sensitivity_bar_chart.py](examples/minimal-paper/scripts/plot_prefetcher_sensitivity_bar_chart.py)
+- compatible copy:
+  [examples/minimal-paper/scripts/plot_prefetcher_sensitivity_bar_chart_fontbigger.py](examples/minimal-paper/scripts/plot_prefetcher_sensitivity_bar_chart_fontbigger.py)
+- matching style file:
+  [examples/minimal-paper/.fontbigger/prefetcher_style.json](examples/minimal-paper/.fontbigger/prefetcher_style.json)
+
+The sample paper already includes that figure as well:
+
+- [examples/minimal-paper/main.tex](examples/minimal-paper/main.tex)
+
+## Configuration
+
+The extension namespace is `fontBigger`.
 
 - `fontBigger.styleFile`
-  样式文件路径，默认 `.fontbigger/figure_style.json`
+  Relative path to the active figure style file
+- `fontBigger.registryFile`
+  Relative path to the figure registry
 - `fontBigger.plotScript`
-  Python 绘图脚本路径，默认 `scripts/plot_demo.py`
+  Relative path to the active Python plotting script
 - `fontBigger.mainTexFile`
-  主 TeX 文件路径，默认 `main.tex`
+  Relative path to the main TeX file
 - `fontBigger.pythonCommand`
-  Python 可执行命令，默认 `python3`
+  Python executable, default `python3`
 - `fontBigger.latexCommand`
-  自定义 LaTeX 编译命令；留空时自动使用 `latexmk -pdf -interaction=nonstopmode -synctex=1 <main.tex>`
+  Optional explicit LaTeX command. If empty, the extension resolves and runs `latexmk`
 - `fontBigger.runOnSave`
-  是否在保存样式文件时自动运行，默认 `true`
+  Whether saving the active style file automatically triggers the pipeline
 
-## 原型边界
+These settings are resource-scoped, so the extension can switch the active figure inside a workspace folder.
 
-`V0.1` 明确只做一个稳定闭环，不做这些事：
+## Current Limits
 
-- 不在 PDF 里点图调参
-- 不自动识别任意图片和任意 Python 源码的映射关系
-- 不改写用户自己的 matplotlib 代码
-- 不提供复杂 GUI 面板
-- 不支持多后端绘图库
+This is still a prototype. Current limits are deliberate:
 
-## 下一步
+- no clickable PDF object detection
+- no automatic PDF coordinate-to-figure mapping
+- no claim of fully automatic adaptation for arbitrary Python plotting scripts
+- no GUI control panel yet
+- matplotlib-focused, not a general plotting backend manager
 
-比较自然的后续演进方向：
+## Near-Term Direction
 
-- 多个 preset
-- 用表单替代直接写 JSON
-- 多图管理
-- 更好的错误提示
-- Overleaf / Overleaf Workshop 兼容
+Likely next steps:
+
+- stronger automatic replacement for hardcoded fontsize/color/legend arguments
+- better registry editing and figure discovery UX
+- presets such as `paper`, `rebuttal`, and `presentation`
+- form-based editing instead of raw JSON
+- clearer diagnostics
+- better coexistence with real project structures and Overleaf-style workflows

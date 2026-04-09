@@ -1,0 +1,17 @@
+.DS_Store
+__pycache__/
+*.pyc
+
+examples/minimal-paper/.fontbigger/.mplconfig/
+examples/minimal-paper/.fontbigger/.cache/
+examples/minimal-paper/.fontbigger/.config/
+examples/minimal-paper/figures/output.pdf
+examples/minimal-paper/figures/output.png
+examples/minimal-paper/*.aux
+examples/minimal-paper/*.fdb_latexmk
+examples/minimal-paper/*.fls
+examples/minimal-paper/*.log
+examples/minimal-paper/*.out
+examples/minimal-paper/*.pdfsync
+examples/minimal-paper/*.synctex.gz
+examples/minimal-paper/main.pdf

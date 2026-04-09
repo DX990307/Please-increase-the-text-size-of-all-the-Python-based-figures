@@ -1,0 +1,79 @@
+{
+  "name": "font-bigger-prototype",
+  "displayName": "你把字体调大一点",
+  "description": "Tune matplotlib figure styles from VS Code and rebuild LaTeX PDFs on save.",
+  "version": "0.1.0",
+  "publisher": "local-prototype",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "latex",
+    "matplotlib",
+    "paper",
+    "python",
+    "pdf"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:fontBigger.openStyleFile",
+    "onCommand:fontBigger.runPipeline",
+    "onCommand:fontBigger.createStyleFile"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "fontBigger.openStyleFile",
+        "title": "Font Bigger: Open Style File"
+      },
+      {
+        "command": "fontBigger.runPipeline",
+        "title": "Font Bigger: Run Figure + LaTeX Pipeline"
+      },
+      {
+        "command": "fontBigger.createStyleFile",
+        "title": "Font Bigger: Create Default Style File"
+      }
+    ],
+    "configuration": {
+      "title": "Font Bigger",
+      "properties": {
+        "fontBigger.styleFile": {
+          "type": "string",
+          "default": ".fontbigger/figure_style.json",
+          "description": "Relative path to the figure style JSON file."
+        },
+        "fontBigger.plotScript": {
+          "type": "string",
+          "default": "scripts/plot_demo.py",
+          "description": "Relative path to the Python plotting script."
+        },
+        "fontBigger.mainTexFile": {
+          "type": "string",
+          "default": "main.tex",
+          "description": "Relative path to the main TeX file."
+        },
+        "fontBigger.pythonCommand": {
+          "type": "string",
+          "default": "python3",
+          "description": "Command used to run the Python plotting script."
+        },
+        "fontBigger.latexCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Optional LaTeX build command. When empty, latexmk is used automatically."
+        },
+        "fontBigger.runOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run the figure + LaTeX pipeline automatically when the style file is saved."
+        }
+      }
+    }
+  }
+}

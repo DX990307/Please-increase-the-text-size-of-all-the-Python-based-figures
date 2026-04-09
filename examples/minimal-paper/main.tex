@@ -1,0 +1,34 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{caption}
+
+\title{Font Bigger Demo Paper}
+\author{VS Code Prototype}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Why This Exists}
+
+This minimal paper demonstrates a tight loop for tuning Python-generated figures in the context that matters: the final PDF layout.
+
+\section{Figure In Context}
+
+The figure below is intentionally included at column width. The default style file uses a larger font so the plot stays readable after typesetting.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/output.pdf}
+  \caption{A matplotlib figure generated from a JSON style file.}
+  \label{fig:demo}
+\end{figure}
+
+Small parameter tweaks are usually obvious only after the figure is embedded in the paper. This prototype shortens that feedback loop.
+
+\end{document}

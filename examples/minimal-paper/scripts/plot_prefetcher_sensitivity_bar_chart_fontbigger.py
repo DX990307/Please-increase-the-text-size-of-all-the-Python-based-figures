@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-import argparse
-import copy
 import csv
-import json
 import os
 from pathlib import Path
 
@@ -117,7 +114,7 @@ SERIES = {
 }
 
 
-DEFAULT_STYLE = {
+STYLE = {
     "canvas": {
         "figure_width": 7.4,
         "figure_height": 3.8,
@@ -185,22 +182,6 @@ DEFAULT_STYLE = {
         },
     },
 }
-
-
-def load_style(style_path: Path) -> dict:
-    with style_path.open("r", encoding="utf-8") as handle:
-        user_style = json.load(handle)
-    style = copy.deepcopy(DEFAULT_STYLE)
-    deep_merge(style, user_style)
-    return style
-
-
-def deep_merge(base: dict, overrides: dict) -> None:
-    for key, value in overrides.items():
-        if isinstance(value, dict) and isinstance(base.get(key), dict):
-            deep_merge(base[key], value)
-        else:
-            base[key] = value
 
 
 def resolve_output_dir(style: dict) -> Path:
@@ -320,24 +301,11 @@ def plot_chart(style: dict, output_dir: Path) -> None:
     plt.close(fig)
 
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--style",
-        type=Path,
-        default=PROJECT_ROOT / ".fontbigger" / "prefetcher_style.json",
-        help="Path to the JSON style file.",
-    )
-    return parser.parse_args()
-
-
 def main() -> None:
-    args = parse_args()
-    style = load_style(args.style.resolve())
-    output_dir = resolve_output_dir(style)
+    output_dir = resolve_output_dir(STYLE)
     output_dir.mkdir(parents=True, exist_ok=True)
     write_csv(output_dir)
-    plot_chart(style, output_dir)
+    plot_chart(STYLE, output_dir)
     print(f"Rendered prefetcher figure to {output_dir}")
 
 

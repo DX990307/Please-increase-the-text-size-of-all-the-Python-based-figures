@@ -32,5 +32,6 @@
         "latexmk"
       ]
     }
-  ]
+  ],
+  "fontBigger.plotScript": "scripts/plot_prefetcher_sensitivity_bar_chart_fontbigger.py"
 }

@@ -24,7 +24,6 @@
     "onCommand:fontBigger.openFigureRegistry",
     "onCommand:fontBigger.openConfigForFigureUnderCursor",
     "onCommand:fontBigger.runPipeline",
-    "onCommand:fontBigger.createStyleFile",
     "onCommand:fontBigger.createCompatibleCopy"
   ],
   "main": "./src/extension.js",
@@ -32,7 +31,7 @@
     "commands": [
       {
         "command": "fontBigger.openStyleFile",
-        "title": "Font Bigger: Open Style File"
+        "title": "Font Bigger: Open Active Figure Script"
       },
       {
         "command": "fontBigger.openFigureRegistry",
@@ -40,15 +39,11 @@
       },
       {
         "command": "fontBigger.openConfigForFigureUnderCursor",
-        "title": "Font Bigger: Open Config For Figure Under Cursor"
+        "title": "Font Bigger: Open Figure Script In VS Code"
       },
       {
         "command": "fontBigger.runPipeline",
         "title": "Font Bigger: Run Figure + LaTeX Pipeline"
-      },
-      {
-        "command": "fontBigger.createStyleFile",
-        "title": "Font Bigger: Create Default Style File"
       },
       {
         "command": "fontBigger.createCompatibleCopy",
@@ -58,12 +53,6 @@
     "configuration": {
       "title": "Font Bigger",
       "properties": {
-        "fontBigger.styleFile": {
-          "type": "string",
-          "default": ".fontbigger/figure_style.json",
-          "scope": "resource",
-          "description": "Relative path to the figure style JSON file."
-        },
         "fontBigger.registryFile": {
           "type": "string",
           "default": ".fontbigger/figures.json",
@@ -94,11 +83,23 @@
           "scope": "resource",
           "description": "Optional LaTeX build command. When empty, latexmk is used automatically."
         },
+        "fontBigger.compileBackend": {
+          "type": "string",
+          "default": "auto",
+          "enum": [
+            "auto",
+            "direct",
+            "latex-workshop",
+            "overleaf-workshop"
+          ],
+          "scope": "resource",
+          "description": "LaTeX compile backend. Use overleaf-workshop for Overleaf local replicas, latex-workshop for local LaTeX Workshop projects, direct for built-in latexmk execution, or auto to prefer installed editor integrations."
+        },
         "fontBigger.runOnSave": {
           "type": "boolean",
           "default": true,
           "scope": "resource",
-          "description": "Run the figure + LaTeX pipeline automatically when the style file is saved."
+          "description": "Run the figure + LaTeX pipeline automatically when the active figure script is saved."
         }
       }
     }

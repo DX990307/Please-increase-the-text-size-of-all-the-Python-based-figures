@@ -20,13 +20,13 @@ This minimal paper demonstrates a tight loop for tuning Python-generated figures
 
 \section{Figure In Context}
 
-The figure below is intentionally included at column width. The default style file uses a larger font so the plot stays readable after typesetting.
+The figure below is intentionally included at column width. In the current prototype, the figure script itself is the editable surface, so typography and visual choices can be tuned directly in Python and reflected in the paper immediately.
 
 % fontbigger: demo
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{figures/output.pdf}
-  \caption{A matplotlib figure generated from a JSON style file.}
+  \caption{A matplotlib figure regenerated from the active figure script.}
   \label{fig:demo}
 \end{figure}
 
@@ -34,7 +34,7 @@ Small parameter tweaks are usually obvious only after the figure is embedded in 
 
 \section{Multiple Figures}
 
-The sample paper also includes a second figure generated from a converted existing script. This demonstrates the multi-figure workflow: each figure can have its own script, style file, output path, and registry entry.
+The sample paper also includes a second figure generated from a converted existing script. This demonstrates the multi-figure workflow: each figure can have its own script, output path, and registry entry.
 
 % fontbigger: prefetcher
 \begin{figure}[t]
@@ -44,6 +44,6 @@ The sample paper also includes a second figure generated from a converted existi
   \label{fig:prefetcher}
 \end{figure}
 
-With the cursor inside either figure environment, the command `Font Bigger: Open Config For Figure Under Cursor` opens the matching style file and switches the active script.
+With the cursor inside either figure environment, the command `Font Bigger: Open Figure Script In VS Code` opens the matching script and switches the active figure.
 
 \end{document}
